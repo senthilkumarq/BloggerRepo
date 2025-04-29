@@ -1,0 +1,42 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
+  # Do not include `push` or `pull_request` triggers to avoid running on commits the it will executed only schedule base
+  schedule:
+    - cron: '*/30 * * * *'
+
+  # '0 16 16 * *' ---> 4pm every month 16th
+  #   '*/40 * * * *'-----> every 40 minutes
+  #   '10 */5 * * *' ' -every 5 hours and 10 minutes past -----> 
+  #    minutes, hour, day of month(1 to 30), month(1 to 12), day of week(0 to 6)
+jobs:
+  test:
+    timeout-minutes: 10
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2]
+        shardTotal: [2]   
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Run Playwright tests
+      run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30    
