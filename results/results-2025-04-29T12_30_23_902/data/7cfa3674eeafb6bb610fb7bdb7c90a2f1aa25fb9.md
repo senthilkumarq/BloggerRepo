@@ -1,0 +1,101 @@
+# Test info
+
+- Name: run same logic 5 times in one test
+- Location: C:\Users\senthilkumar\Desktop\playwright\coding\Business\BloggerRepo\tests\example6.spec.ts:2:5
+
+# Error details
+
+```
+Error: locator.click: Test timeout of 30000ms exceeded.
+Call log:
+  - waiting for locator('//*[text()=\'https://playwrightautomationtesting.blogspot.com\']').first()
+    - locator resolved to <cite role="text" class="tjvcx GvPZzd cHaqb">https://playwrightautomationtesting.blogspot.com</cite>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+    - element is not stable
+  - retrying click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - element is outside of the viewport
+  - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - element is outside of the viewport
+    - retrying click action
+      - waiting 100ms
+    11 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - element is outside of the viewport
+     - retrying click action
+       - waiting 500ms
+
+    at C:\Users\senthilkumar\Desktop\playwright\coding\Business\BloggerRepo\tests\example6.spec.ts:28:30
+    at C:\Users\senthilkumar\Desktop\playwright\coding\Business\BloggerRepo\tests\example6.spec.ts:4:5
+```
+
+# Page snapshot
+
+```yaml
+- dialog "See results closer to you?":
+  - heading "See results closer to you?" [level=1]
+  - text: To get the closest results, let Google use your device's precise location.
+  - button "Use precise location"
+  - button "Not now"
+```
+
+# Test source
+
+```ts
+   1 | import { test, expect, chromium } from '@playwright/test';
+   2 | test('run same logic 5 times in one test', async ({ page }) => {
+   3 |   for (let i = 1; i <= 5; i++) {
+   4 |     await test.step(`Iteration ${i}`, async () => {
+   5 |   await page.goto('https://www.google.com');
+   6 |
+   7 |   console.log('Filling search input...');
+   8 |   const searchInput = page.locator('*[name="q"]');
+   9 |   await searchInput.fill('SenthilSmartQaHub');
+  10 |   console.log('Submitting search...');
+  11 |   await searchInput.press('Enter');
+  12 |
+  13 |   console.log('Waiting for search results...');
+  14 |   await page.waitForTimeout(2000);
+  15 |
+  16 |   console.log('Checking for "Not now" prompt...');
+  17 |   const location = await page.locator("//*[text()='Not now']").first().isVisible();
+  18 |
+  19 |   if (location) {
+  20 |     console.log('"Not now" prompt found. Clicking it...');
+  21 |     await page.locator("//*[text()='Not now']").first().click();
+  22 |   } else {
+  23 |     console.log('"Not now" prompt not visible.');
+  24 |   }
+  25 |
+  26 |   console.log('Looking for expected link...');
+  27 |   const expectedLink = page.locator("//*[text()='https://playwrightautomationtesting.blogspot.com']");
+> 28 |   await expectedLink.first().click();
+     |                              ^ Error: locator.click: Test timeout of 30000ms exceeded.
+  29 |
+  30 |   console.log('Waiting for blog page to load...');
+  31 |   await page.waitForTimeout(2000);
+  32 |
+  33 |   console.log('Clicking "Course Topics"...');
+  34 |   await page.locator("//*[text()='Course Topics']").first().click();
+  35 |
+  36 |   console.log('Verifying title is visible...');
+  37 |   const title = page.locator("//*[@class='post-title entry-title']");
+  38 |   await expect(title).toBeVisible();
+  39 |
+  40 |   console.log('Test completed successfully.');
+  41 |
+  42 | });
+  43 | }
+  44 | });
+```

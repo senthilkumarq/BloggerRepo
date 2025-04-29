@@ -1,17 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
-
-test('Google search automation - SenthilSmartQaHub', async () => {
-  console.log('Launching browser...');
-  const browser = await chromium.launch({
-    headless: false, // change to false if you want to see the browser
-    args: ['--disable-blink-features=AutomationControlled'],
-  });
-
-  console.log('Creating browser context...');
-  const context = await browser.newContext({});
-  const page = await context.newPage();
-
-  console.log('Navigating to Google...');
+test.describe.parallel('Run same test 10 times in parallel', () => {
+  for (let i = 1; i <= 100; i++) {
+    test(`Parallel run ${i}`, async ({ page }) => {
   await page.goto('https://www.google.com');
 
   console.log('Filling search input...');
@@ -48,4 +38,7 @@ test('Google search automation - SenthilSmartQaHub', async () => {
   await expect(title).toBeVisible();
 
   console.log('Test completed successfully.');
+
+});
+}
 });

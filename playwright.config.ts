@@ -20,9 +20,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 0: 0,
-  timeout:130000,
+  timeout:30000 * 10000,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers:100,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [['html',{open:'always',outputFolder},],['line']],
 
@@ -35,7 +35,10 @@ export default defineConfig({
     trace: 'on-first-retry',
     headless:true,
     video:'on',
-    screenshot:'on'
+    screenshot:'on',
+    launchOptions: {
+      args: ['--disable-blink-features=AutomationControlled'],
+    },
   },
 
   /* Configure projects for major browsers */
