@@ -8,7 +8,7 @@ on:
   #   branches: [ main ]
   # Do not include `push` or `pull_request` triggers to avoid running on commits the it will executed only schedule base
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '*/5 * * * *'
 
   # '0 16 16 * *' ---> 4pm every month 16th
   #   '*/40 * * * *'-----> every 40 minutes
