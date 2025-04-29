@@ -11,7 +11,7 @@ test.describe.parallel('Run same test 10 times in parallel', () => {
   await searchInput.press('Enter');
 
   console.log('Waiting for search results...');
-  await page.waitForTimeout(2000);
+  await page.waitForLoadState('domcontentloaded')
 
   console.log('Checking for "Not now" prompt...');
   const location = await page.locator("//*[text()='Not now']").first().isVisible();
@@ -28,7 +28,7 @@ test.describe.parallel('Run same test 10 times in parallel', () => {
   await expectedLink.first().click();
 
   console.log('Waiting for blog page to load...');
-  await page.waitForTimeout(2000);
+  await page.waitForLoadState('domcontentloaded')
 
   console.log('Clicking "Course Topics"...');
   await page.locator("//*[text()='Course Topics']").first().click();
