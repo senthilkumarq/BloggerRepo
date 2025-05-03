@@ -1,6 +1,6 @@
 import { test, expect, chromium } from '@playwright/test';
 test.describe.parallel('Run same test 10 times in parallel', () => {
-  for (let i = 1; i <= 1; i++) {
+  for (let i = 1; i <= 10; i++) {
     test(`Parallel run ${i}`, async ({ page }) => {
   await page.goto('https://www.google.com');
 
